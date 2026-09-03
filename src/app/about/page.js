@@ -1,72 +1,180 @@
-import React from 'react'
-import ColoredBadge from '@/components/colored-badge'
-import { Code2, MapPin, Mail, Clock, Globe, User2 } from 'lucide-react'
-import { SiGithub, SiX } from "react-icons/si";
+import React from "react";
+import ColoredBadge from "@/components/colored-badge";
+import { Mail } from "lucide-react";
+import { SiGithub, SiLeetcode } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
-import { Button } from '@/components/ui/button'
-import CardStack from '@/components/card-stack'
+import { Button } from "@/components/ui/button";
+import CardStack from "@/components/card-stack";
 
-const Hl = ({ children }) => <span className='text-foreground font-medium'>{children}</span>
+const Hl = ({ children }) => (
+  <span className="text-foreground font-medium">{children}</span>
+);
 
 export default function About() {
-    return (
-        <main className='px-6 pb-12 pt-36 w-full max-w-3xl mx-auto'>
-            <div className='text-2xl sm:text-3xl font-bold tracking-tight'>
-                <h1>I solve problems,</h1>
-                <h1 className='text-foreground/50'>they call it coding.</h1>
-            </div>
+  return (
+    <main className="px-6 pb-12 pt-36 w-full max-w-3xl mx-auto">
+      <div className="text-2xl sm:text-3xl font-bold tracking-tight">
+        <h1>I build backend architectures & intelligent systems,</h1>
+        <h1 className="text-foreground/50">
+          powered by code and curiosity.
+        </h1>
+      </div>
 
-            <div className='mt-6 flex flex-col gap-6 text-muted-foreground'>
-                <p>
-                    I'm <Hl>Malay Patra</Hl>, a developer who builds solutions to the problems I face in my day-to-day life. I almost never start learning a new technology watching a tutorial. Instead, I just find a problem to solve and learn things on the fly. Yes, <Hl>"I read docs"</Hl>.
-                </p>
+      <div className="mt-6 flex flex-col gap-6 text-muted-foreground">
+        <p>
+          I'm <Hl>Aziz Reja</Hl>, a <Hl>B.E.</Hl> student at{" "}
+          <Hl>Jadavpur University</Hl> (2024–2028) and a full-stack & backend
+          developer passionate about scalable systems, distributed architecture, and AI.
+        </p>
 
-                <p>
-                    I'm <ColoredBadge text="Curious" className="bg-cyan-400/10 text-cyan-400" />, <ColoredBadge text="Focused" className="text-blue-400 bg-blue-400/10" />, <ColoredBadge text="Obsessed" className="text-purple-400 bg-purple-400/10" /> and a <ColoredBadge text="Solver" className="text-emerald-400 bg-emerald-400/10" />.
-                </p>
+        <p>
+          {/* Bio placeholder - user will add later */}
+        </p>
 
-                <h2 className='text-2xl font-bold mt-8 text-foreground'>How it started</h2>
-                <p>
-                    It started in <Hl>2020</Hl>, when I got my first <Hl>Android</Hl> phone in my hand. I was very curious about <Hl>hacking</Hl> (of course I saw that in movies) although I had no idea what it actually was. I am from a small village in <Hl>West Bengal, India</Hl>; hacking or programming both make zero sense to my parents and friends.
-                </p>
+        <p>
+          I'm{" "}
+          <ColoredBadge
+            text="Curious"
+            className="bg-cyan-400/10 text-cyan-400"
+          />
+          ,{" "}
+          <ColoredBadge
+            text="Builder"
+            className="bg-blue-400/10 text-blue-400"
+          />
+          ,{" "}
+          <ColoredBadge
+            text="Problem Solver"
+            className="bg-emerald-400/10 text-emerald-400"
+          />
+          , and{" "}
+          <ColoredBadge
+            text="Backend Engineer"
+            className="bg-purple-400/10 text-purple-400"
+          />
+          .
+        </p>
 
-                <p>The first interesting thing I tried was <Hl>SMS bombing</Hl>, which I did using the <a href="https://termux.dev/" target="_blank" rel="noopener noreferrer" className="link">Termux app</a> downloaded from <a href="https://f-droid.org/" target="_blank" rel="noopener noreferrer" className="link">F-Droid</a>. I tried to see what's inside and I found out that it's some colorful text which is run using <Hl>Python</Hl>. I was very curious about it and I started digging deeper.
-                </p>
+        <h2 className="text-2xl font-bold mt-8 text-foreground">
+          Tech Stack
+        </h2>
 
-                <p>And this is exactly how I got into <Hl>programming</Hl>!</p>
+        <p>
+          <Hl>Java</Hl>, <Hl>Spring Boot</Hl>, <Hl>Python</Hl>, <Hl>FastAPI</Hl>
+          , <Hl>React</Hl>, <Hl>PostgreSQL</Hl>, <Hl>MongoDB</Hl>, <Hl>Git</Hl>
+          , <Hl>GitHub</Hl>, and <Hl>Postman</Hl>.
+        </p>
 
-                <p>Today, I am a <Hl>Full-Stack developer</Hl>, solving problems I face in my day-to-day life. I have worked with a couple of <Hl>startups</Hl> and founded my own SaaS, <a href="https://adotion.pro" target="_blank" rel="noopener noreferrer" className='link'>Adotion</a>. I have also shipped many <Hl>automation systems</Hl> to clients across the globe during my <Hl>freelancing</Hl> days.</p>
+        <div className="my-8">
+          <h2 className="text-2xl font-bold mb-6 text-foreground">
+            Featured Projects
+          </h2>
+          <CardStack />
+        </div>
 
-                <p>I <Hl>do not</Hl> personally like to sit and <Hl>watch a course or tutorial</Hl> video for the sake of learning something new; I believe just getting up and trying to <Hl>build something</Hl> teaches me way more than that. Even while you're reading this page, I am most probably debugging something or building a new feature.</p>
+        <div className="flex flex-col gap-5">
+          <div>
+            <h3 className="font-semibold text-foreground text-lg">
+              Food Delivery Microservices
+            </h3>
+            <p>
+              A production-ready food delivery platform built with Spring Boot microservices,
+              Spring Security with JWT, Eureka service discovery, Apache Kafka event streaming,
+              and Spring Cloud Gateway.
+            </p>
+          </div>
 
-                <div className="my-8">
-                    <h2 className='text-2xl font-bold mb-6 text-foreground'>A Glimpse</h2>
-                    <CardStack />
-                </div>
+          <div>
+            <h3 className="font-semibold text-foreground text-lg">
+              AI Resume Builder
+            </h3>
+            <p>
+              An AI resume builder that builds and enhances your resume by fetching data
+              from GitHub and intelligently filling it up using FastAPI, React, LangChain, and LangGraph.
+            </p>
+          </div>
 
-                <h2 className='text-2xl font-bold mt-8 text-foreground'>Let's connect</h2>
-                <p>
-                    Whether you have a problem that needs solving, or you just want to say "Hi" to me, I would love to hear from you.
-                </p>
+          <div>
+            <h3 className="font-semibold text-foreground text-lg">
+              AI Agent Chatbot
+            </h3>
+            <p>
+              An AI chatbot that integrates with Google and executes your tasks or messages
+              across Google Drive, Docs, Calendar, Gmail, Tasks, and Slack.
+            </p>
+          </div>
 
-                <div className='flex items-center gap-2 text-foreground'>
-                    <a href="/#contact">
-                        <Button variant="outline">
-                            <Mail className='size-4 mr-1' /> Email
-                        </Button>
-                    </a>
-                    <a href="https://linkedin.com/in/qubydev" target="_blank" rel="noopener noreferrer">
-                        <Button variant="outline">
-                            <FaLinkedin className='size-4 mr-1' /> LinkedIn
-                        </Button>
-                    </a>
-                    <a href="https://twitter.com/qubydev" target="_blank" rel="noopener noreferrer">
-                        <Button variant="outline">
-                            <SiX className='size-4 mr-1' /> Twitter
-                        </Button>
-                    </a>
-                </div>
-            </div>
-        </main>
-    )
+          <div>
+            <h3 className="font-semibold text-foreground text-lg">
+              Banking App
+            </h3>
+            <p>
+              A full-stack banking application built with Java Spring Boot and React, featuring
+              secure authentication, fund transfers, balance tracking, and transaction history.
+            </p>
+          </div>
+        </div>
+
+        <h2 className="text-2xl font-bold mt-8 text-foreground">
+          Achievements
+        </h2>
+
+        <p>
+          Active on LeetCode at <a href="https://leetcode.com/u/AzizReja/" target="_blank" rel="noreferrer" className="text-foreground underline underline-offset-4 hover:text-primary">AzizReja</a>,
+          regularly solving data structures and algorithm challenges.
+        </p>
+
+        <h2 className="text-2xl font-bold mt-8 text-foreground">
+          Let's Connect
+        </h2>
+
+        <p>
+          I'm always open to collaborating on backend, distributed systems, AI, or full-stack
+          projects—or simply connecting with fellow developers.
+        </p>
+
+        <div className="flex flex-wrap gap-3">
+          <a href="mailto:rejaaziz686@gmail.com">
+            <Button variant="outline">
+              <Mail className="size-4 mr-2" />
+              Email
+            </Button>
+          </a>
+
+          <a
+            href="https://github.com/AzizReja10"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button variant="outline">
+              <SiGithub className="size-4 mr-2" />
+              GitHub
+            </Button>
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/aziz-reja-8b916a33a/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button variant="outline">
+              <FaLinkedin className="size-4 mr-2" />
+              LinkedIn
+            </Button>
+          </a>
+
+          <a
+            href="https://leetcode.com/u/AzizReja/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button variant="outline">
+              <SiLeetcode className="size-4 mr-2" />
+              LeetCode
+            </Button>
+          </a>
+        </div>
+      </div>
+    </main>
+  );
 }

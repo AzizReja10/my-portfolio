@@ -25,7 +25,7 @@ export default function Navbar() {
             <nav className='w-full max-w-3xl mx-auto px-6 flex items-center h-full'>
                 <Link className="text-sm font-medium tracking-tight flex items-center" href="/">
                     <span className="text-muted-foreground">~/</span>
-                    <HyperText className={"text-sm"}>qubydev</HyperText>
+                    <HyperText className={"text-sm"}>azizreja</HyperText>
                 </Link>
 
                 <div className="flex items-center gap-2 ml-auto">

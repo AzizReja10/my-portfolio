@@ -12,6 +12,7 @@ export default function Quote() {
     useEffect(() => {
         fetch('/api/quote')
             .then(res => {
+                console.log("Response from quote API:", res);
                 if (!res.ok) throw new Error('API unavailable');
                 return res.json();
             })

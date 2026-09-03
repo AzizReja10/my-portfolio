@@ -2,32 +2,7 @@ import React from 'react'
 
 export default function Experience() {
     const experiences = [
-        {
-            title: "SDE Intern",
-            company: "Souloxy",
-            location: "Remote",
-            date: "May 2025 - Jan 2026",
-            logo: "/souloxy.png",
-            description: "Worked closely with the core development team of souloxy as a Full-Stack developer. Gained experience working in a live production environment.",
-            bullets: [
-                "Migrated codebase to latest libraries such as Vite and Tailwind CSS",
-                "Learned to work with live production database (PostgreSQL)",
-                "Implemented backend security features and optimized API performance"
-            ]
-        },
-        {
-            title: "Freelancer",
-            company: "Upwork",
-            location: "Remote",
-            date: "Apr 2023 - Sept 2025",
-            logo: "/upwork.svg",
-            description: "Delivered fully automated & AI integrated softwares to clients across the globe, making their life easier.",
-            bullets: [
-                "Expert in data scraping using selenium/puppeteer + proxy + captcha solving",
-                "Developed automated solution to problems faced by my clients",
-                "Integrated AI to enhance the functionality of the softwares"
-            ]
-        }
+        
     ]
 
     return (

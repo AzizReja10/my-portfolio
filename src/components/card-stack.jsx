@@ -7,49 +7,49 @@ import { Button } from "@/components/ui/button";
 const ITEMS = [
   {
     id: 0,
-    src: "/gallery/0.png",
+    src: "/gallery/0.jpg",
     title: "Designing",
     subtitle: "Beside coding, I also design",
   },
   {
     id: 1,
-    src: "/gallery/1.png",
+    src: "/gallery/1.jpg",
     title: "Books",
     subtitle: "I read books (rarely)",
   },
   {
     id: 2,
-    src: "/gallery/2.png",
+    src: "/gallery/2.jpg",
     title: "Doodles",
     subtitle: "I doodle (even in the places I'm not supposed to)",
   },
   {
     id: 3,
-    src: "/gallery/3.png",
+    src: "/gallery/3.jpg",
     title: "My Hometown",
     subtitle: "I love my hometown",
   },
   {
     id: 4,
-    src: "/gallery/4.png",
+    src: "/gallery/4.jpg",
     title: "Traveling",
     subtitle: "I travel very less, but yeah I enjoy",
   },
   {
     id: 5,
-    src: "/gallery/5.png",
+    src: "/gallery/5.jpg",
     title: "Hardwares",
     subtitle: "Sometimes I play with the hardware too",
   },
   {
     id: 6,
-    src: "/gallery/6.png",
+    src: "/gallery/6.jpg",
     title: "My Uni",
     subtitle: "I study in Jadavpur University, India",
   },
   {
     id: 7,
-    src: "/gallery/7.png",
+    src: "/gallery/7.jpg",
     title: "The Sky",
     subtitle: "This is how the sky looks like from my home",
   }
