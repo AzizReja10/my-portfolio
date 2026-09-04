@@ -38,7 +38,6 @@ const techStack = [
     { name: "PostgreSQL", Icon: SiPostgresql, color: "#4169E1" },
     { name: "MongoDB", Icon: SiMongodb, color: "#47A248" },
     { name: "Docker", Icon: SiDocker, color: "#2496ED" },
-    { name: "TypeScript", Icon: SiTypescript, color: "#3178C6" },
     { name: "JavaScript", Icon: SiJavascript, color: "#F7DF1E" },
     { name: "Tailwind CSS", Icon: SiTailwindcss, color: "#06B6D4" },
     { name: "Git", Icon: SiGit, color: "#F05032" },
@@ -79,27 +78,6 @@ export default function Activity() {
             viewport={{ once: true, margin: "-40px" }}
             className="mt-12 sm:mt-16 space-y-10"
         >
-            {/* GitHub Commits & Activity */}
-            <div>
-                <div className="flex items-center justify-between mb-3.5">
-                    <h2 className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
-                        GitHub Activity
-                    </h2>
-                    <a
-                        href="https://github.com/AzizReja10"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[11px] text-muted-foreground/70 hover:text-foreground transition-colors"
-                    >
-                        @AzizReja10
-                    </a>
-                </div>
-
-                <div className="rounded-2xl p-4 sm:p-5 bg-card/60 border border-border/60 backdrop-blur-sm shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.2)]">
-                    <GithubCalendar username="AzizReja10" />
-                </div>
-            </div>
-
             {/* LeetCode Submissions & Activity */}
             <div>
                 <div className="flex items-center justify-between mb-3.5">
@@ -118,6 +96,27 @@ export default function Activity() {
 
                 <div className="rounded-2xl p-4 sm:p-5 bg-card/60 border border-border/60 backdrop-blur-sm shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.2)]">
                     <LeetcodeStats username="AzizReja" />
+                </div>
+            </div>
+
+            {/* GitHub Commits & Activity */}
+            <div>
+                <div className="flex items-center justify-between mb-3.5">
+                    <h2 className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
+                        GitHub Activity
+                    </h2>
+                    <a
+                        href="https://github.com/AzizReja10"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] text-muted-foreground/70 hover:text-foreground transition-colors"
+                    >
+                        @AzizReja10
+                    </a>
+                </div>
+
+                <div className="rounded-2xl p-4 sm:p-5 bg-card/60 border border-border/60 backdrop-blur-sm shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.2)]">
+                    <GithubCalendar username="AzizReja10" />
                 </div>
             </div>
 
