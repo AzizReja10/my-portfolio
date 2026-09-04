@@ -1,4 +1,9 @@
+"use client";
+
 import React from 'react'
+import { motion } from 'motion/react'
+import GithubCalendar from '@/components/github-calendar'
+import LeetcodeStats from '@/components/leetcode-stats'
 import {
     Tooltip,
     TooltipContent,
@@ -42,35 +47,125 @@ const techStack = [
     { name: "LangGraph", Icon: SiLanggraph, color: "#0284C7" },
 ]
 
+const containerVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.5,
+            staggerChildren: 0.04,
+            delayChildren: 0.15
+        }
+    }
+};
+
+const iconVariants = {
+    hidden: { opacity: 0, scale: 0.7, y: 10 },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        transition: { type: "spring", stiffness: 350, damping: 20 }
+    }
+};
+
 export default function Activity() {
     return (
-        <section className="mt-12 sm:mt-14">
+        <motion.section 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-40px" }}
+            className="mt-12 sm:mt-16 space-y-10"
+        >
+            {/* GitHub Commits & Activity */}
             <div>
-                <h2 className="mb-4 text-xs uppercase tracking-widest text-muted-foreground">Tech Stack</h2>
-                <div className="flex flex-wrap items-center gap-3.5 sm:gap-4.5">
-                    {techStack.map((tech) => {
-                        const IconComponent = tech.Icon;
-                        return (
-                            <Tooltip key={tech.name}>
-                                <TooltipTrigger asChild>
-                                    <div
-                                        className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center cursor-pointer transition-transform duration-200 hover:scale-110"
-                                        aria-label={tech.name}
-                                    >
-                                        <IconComponent
-                                            className={`h-6 w-6 sm:h-7 sm:w-7 transition-colors ${tech.className || ''}`}
-                                            style={tech.color ? { color: tech.color } : undefined}
-                                        />
-                                    </div>
-                                </TooltipTrigger>
-                                <TooltipContent side="top" sideOffset={6}>
-                                    {tech.name}
-                                </TooltipContent>
-                            </Tooltip>
-                        );
-                    })}
+                <div className="flex items-center justify-between mb-3.5">
+                    <h2 className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
+                        GitHub Activity
+                    </h2>
+                    <a
+                        href="https://github.com/AzizReja10"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] text-muted-foreground/70 hover:text-foreground transition-colors"
+                    >
+                        @AzizReja10
+                    </a>
+                </div>
+
+                <div className="rounded-2xl p-4 sm:p-5 bg-card/60 border border-border/60 backdrop-blur-sm shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.2)]">
+                    <GithubCalendar username="AzizReja10" />
                 </div>
             </div>
-        </section>
+
+            {/* LeetCode Submissions & Activity */}
+            <div>
+                <div className="flex items-center justify-between mb-3.5">
+                    <h2 className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
+                        LeetCode Activity
+                    </h2>
+                    <a
+                        href="https://leetcode.com/u/AzizReja/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] text-muted-foreground/70 hover:text-foreground transition-colors"
+                    >
+                        @AzizReja
+                    </a>
+                </div>
+
+                <div className="rounded-2xl p-4 sm:p-5 bg-card/60 border border-border/60 backdrop-blur-sm shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.2)]">
+                    <LeetcodeStats username="AzizReja" />
+                </div>
+            </div>
+
+            {/* Tech Stack */}
+            <div>
+                <div className="flex items-center justify-between mb-3.5">
+                    <h2 className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
+                        Tech Stack
+                    </h2>
+                    <span className="text-[11px] text-muted-foreground/60">
+                        16 tools & frameworks
+                    </span>
+                </div>
+
+                <div className="rounded-2xl p-4 sm:p-5 bg-card/60 border border-border/60 backdrop-blur-sm shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.2)]">
+                    <div className="grid grid-cols-4 sm:grid-cols-8 gap-3 sm:gap-4 justify-items-center">
+                        {techStack.map((tech) => {
+                            const IconComponent = tech.Icon;
+                            return (
+                                <Tooltip key={tech.name}>
+                                    <TooltipTrigger asChild>
+                                        <motion.div
+                                            variants={iconVariants}
+                                            whileHover={{ 
+                                                scale: 1.25, 
+                                                y: -4,
+                                                filter: "drop-shadow(0 6px 12px rgba(0,0,0,0.15))"
+                                            }}
+                                            whileTap={{ scale: 0.92 }}
+                                            transition={{ type: "spring", stiffness: 450, damping: 17 }}
+                                            className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-muted/40 hover:bg-muted/80 border border-border/40 hover:border-border transition-colors cursor-pointer"
+                                            aria-label={tech.name}
+                                        >
+                                            <IconComponent
+                                                className={`h-5 w-5 sm:h-6 sm:w-6 transition-transform ${tech.className || ''}`}
+                                                style={tech.color ? { color: tech.color } : undefined}
+                                            />
+                                        </motion.div>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="top" sideOffset={8} className="font-medium text-xs">
+                                        {tech.name}
+                                    </TooltipContent>
+                                </Tooltip>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+        </motion.section>
     )
 }

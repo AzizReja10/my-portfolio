@@ -94,7 +94,7 @@ export const SHOWCASE_DATA = [
         title: "Banking App",
         link: "https://banking-app-5.onrender.com/login",
         github: "https://github.com/AzizReja10/Banking-App",
-        image: "/projects/adotion.png",
+        image: "/projects/banking-app.png",
         description:
           "A full-stack banking application built with Java Spring Boot and React, featuring secure authentication, fund transfers, balance tracking, and transaction history.",
         tech: [

@@ -8,11 +8,11 @@ import {
 } from "@/components/ui/tooltip"
 
 const levelColors = {
-    NONE: "bg-primary/5",
-    FIRST_QUARTILE: "bg-primary/30",
-    SECOND_QUARTILE: "bg-primary/50",
-    THIRD_QUARTILE: "bg-primary/70",
-    FOURTH_QUARTILE: "bg-primary",
+    NONE: "bg-muted/60 dark:bg-muted/30 border border-border/20",
+    FIRST_QUARTILE: "bg-emerald-200 dark:bg-emerald-950 text-foreground",
+    SECOND_QUARTILE: "bg-emerald-400 dark:bg-emerald-700 text-foreground",
+    THIRD_QUARTILE: "bg-emerald-500 dark:bg-emerald-500 text-foreground",
+    FOURTH_QUARTILE: "bg-emerald-600 dark:bg-emerald-400 text-foreground",
 }
 
 const MIN_CELL = 10
@@ -20,6 +20,7 @@ const CELL_GAP = 3
 
 export default function GithubCalendar({ username }) {
     const [calendarData, setCalendarData] = useState(null)
+    const [hasError, setHasError] = useState(false)
 
     useEffect(() => {
         fetch(`/api/github-contributions?username=${username}`)
@@ -30,10 +31,31 @@ export default function GithubCalendar({ username }) {
             .then(data => {
                 if (data && data.weeks) {
                     setCalendarData(data);
+                } else {
+                    setHasError(true);
                 }
             })
-            .catch(err => console.error('GitHub calendar error:', err));
+            .catch(err => {
+                console.error('GitHub calendar error:', err);
+                setHasError(true);
+            });
     }, [username]);
+
+    if (hasError) {
+        return (
+            <div className="flex w-full items-center justify-between py-3 text-xs text-muted-foreground">
+                <span>Contributions graph temporarily unavailable.</span>
+                <a 
+                    href={`https://github.com/${username}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-foreground hover:underline font-medium flex items-center gap-1"
+                >
+                    View commits on GitHub →
+                </a>
+            </div>
+        )
+    }
 
     if (!calendarData) {
         return (
@@ -115,7 +137,7 @@ export default function GithubCalendar({ username }) {
                                 {week.contributionDays.map((day, dayIndex) => (
                                     <Tooltip key={dayIndex}>
                                         <TooltipTrigger asChild>
-                                            <div className={`aspect-square w-full rounded-[2px] ${levelColors[day.contributionLevel]}`} />
+                                            <div className={`aspect-square w-full rounded-[2px] cursor-pointer transition-transform duration-150 hover:scale-125 ${levelColors[day.contributionLevel]}`} />
                                         </TooltipTrigger>
                                         <TooltipContent side="top" sideOffset={4} className="px-2 py-1.5 text-xs">
                                             <strong className="font-medium">{day.contributionCount}</strong> contributions on {new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}

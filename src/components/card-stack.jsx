@@ -14,44 +14,44 @@ const ITEMS = [
   {
     id: 1,
     src: "/gallery/1.jpg",
-    title: "Books",
-    subtitle: "I read books (rarely)",
+    title: "Badminton",
+    subtitle: "I play badminton (sometimes)",
   },
   {
     id: 2,
     src: "/gallery/2.jpg",
-    title: "Doodles",
-    subtitle: "I doodle (even in the places I'm not supposed to)",
+    title: "Winter",
+    subtitle: "I like winter season",
   },
   {
     id: 3,
     src: "/gallery/3.jpg",
-    title: "My Hometown",
-    subtitle: "I love my hometown",
+    title: "coding",
+    subtitle: "I love to build projects",
   },
   {
     id: 4,
     src: "/gallery/4.jpg",
-    title: "Traveling",
-    subtitle: "I travel very less, but yeah I enjoy",
+    title: "My Campus",
+    subtitle: "Jadavpur University",
   },
   {
     id: 5,
     src: "/gallery/5.jpg",
-    title: "Hardwares",
-    subtitle: "Sometimes I play with the hardware too",
+    title: "Art",
+    subtitle: "I like to create art",
   },
   {
     id: 6,
     src: "/gallery/6.jpg",
-    title: "My Uni",
-    subtitle: "I study in Jadavpur University, India",
+    title: "Guitar",
+    subtitle: "I play guitar (sometimes)",
   },
   {
     id: 7,
     src: "/gallery/7.jpg",
-    title: "The Sky",
-    subtitle: "This is how the sky looks like from my home",
+    title: "Travel",
+    subtitle: "I like to travel",
   }
 ];
 

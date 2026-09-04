@@ -5,9 +5,11 @@ export default function Experience() {
         
     ]
 
+    if (experiences.length === 0) return null;
+
     return (
-        <section className="mt-20">
-            <h2 className="mb-4 text-xs uppercase tracking-widest text-muted-foreground">Experience</h2>
+        <section className="mt-16 sm:mt-20">
+            <h2 className="mb-4 text-xs uppercase tracking-widest text-muted-foreground font-medium">Experience</h2>
             <div className="flex flex-col gap-4">
                 {experiences.map((exp, idx) => (
                     <div key={idx} className="group py-5 px-6 rounded-xl bg-card/70 border border-border/50 hover:border-border hover:bg-accent/50 transition-all duration-200">

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "motion/react";
 import {
   Calendar,
   Mail,
@@ -64,14 +65,21 @@ export default function Contact() {
   };
 
   return (
-    <section className="mt-20" id="contact">
-      <h2 className="mb-4 text-xs uppercase tracking-widest text-muted-foreground">
+    <motion.section 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-30px" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="mt-16 sm:mt-20" 
+      id="contact"
+    >
+      <h2 className="mb-4 text-xs uppercase tracking-widest text-muted-foreground font-medium">
         Let's Connect
       </h2>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         {/* Left Side */}
-        <div className="font-geist flex flex-col rounded-xl border border-border/50 bg-card/70 px-6 py-5 transition-all duration-200 hover:border-border hover:bg-accent/50">
+        <div className="font-geist flex flex-col rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:border-border">
           <div className="mb-4 sm:mb-5">
             <h3 className="mb-1.5 text-lg font-medium text-foreground">
               Get in Touch
@@ -169,7 +177,7 @@ export default function Contact() {
         </div>
 
         {/* Right Side - Contact Form */}
-        <div className="font-geist flex flex-col rounded-xl border border-border/50 bg-card/70 px-6 py-5 transition-all duration-200 hover:border-border hover:bg-accent/50">
+        <div className="font-geist flex flex-col rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:border-border">
           <div className="mb-4">
             <h3 className="mb-1.5 text-base font-medium text-foreground sm:text-lg">
               Send a Message
@@ -252,6 +260,6 @@ export default function Contact() {
           </form>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

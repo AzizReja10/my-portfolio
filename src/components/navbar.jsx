@@ -1,5 +1,8 @@
+"use client";
+
 import React from 'react'
 import Link from 'next/link'
+import { motion } from 'motion/react'
 import ThemeToggle from './theme-toggle'
 import {
     DropdownMenu,
@@ -19,9 +22,13 @@ const links = [
 import NavLinks from './nav-links';
 
 export default function Navbar() {
-
     return (
-        <div className='h-16 fixed left-0 top-0 w-full bg-background z-100'>
+        <motion.header 
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className='h-16 fixed left-0 top-0 w-full backdrop-blur-md bg-background/80 border-b border-border/50 z-100 transition-colors'
+        >
             <nav className='w-full max-w-3xl mx-auto px-6 flex items-center h-full'>
                 <Link className="text-sm font-medium tracking-tight flex items-center" href="/">
                     <span className="text-muted-foreground">~/</span>
@@ -55,7 +62,7 @@ export default function Navbar() {
                     </div>
                 </div>
             </nav>
-        </div>
+        </motion.header>
     )
 }
 
