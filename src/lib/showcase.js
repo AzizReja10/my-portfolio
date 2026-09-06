@@ -67,7 +67,7 @@ export const SHOWCASE_DATA = [
         title: "AI Agent Chatbot",
         link: "",
         github: "https://github.com/AzizReja10/ai-agent-chatbot",
-        image: "/projects/logocat.png",
+        image: "/projects/ai-agent-chatbot.png",
         description:
           "An AI chatbot that integrates with Google and executes your tasks or messages across Google Drive, Docs, Calendar, Gmail, Tasks, and Slack.",
         tech: [
