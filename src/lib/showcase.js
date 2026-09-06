@@ -65,7 +65,7 @@ export const SHOWCASE_DATA = [
       },
       {
         title: "AI Agent Chatbot",
-        link: "",
+        link: "https://ai-agent-chatbot-tan.vercel.app/",
         github: "https://github.com/AzizReja10/ai-agent-chatbot",
         image: "/projects/ai-agent-chatbot.png",
         description:

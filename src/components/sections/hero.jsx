@@ -69,7 +69,7 @@ export default function Hero() {
                         </motion.div>
                     </div>
                     <p className="text-muted-foreground text-sm sm:text-base font-normal">
-                        Full-Stack Developer, Backend Developer
+                        Full-Stack Developer
                     </p>
                 </div>
             </motion.div>
@@ -152,7 +152,7 @@ export default function Hero() {
                 <div className="flex flex-wrap items-center gap-2.5">
                     <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
                         <Button size="sm" asChild className="h-9 gap-2 shadow-sm font-medium">
-                            <a href="" target="_blank" rel="noopener noreferrer">
+                            <a href="https://drive.google.com/file/d/1UiNbj0DvE-Q_258MC7pacM_tXZUIKAQI/view?usp=sharing" target="_blank" rel="noopener noreferrer">
                                 <FileText className="h-4 w-4" strokeWidth={1.75} />
                                 <span className="text-[13px]">Resume</span>
                             </a>

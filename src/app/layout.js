@@ -13,8 +13,8 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: "Aziz Reja - Full-Stack & Backend Developer",
-  description: "Portfolio of Aziz Reja, Full-Stack & Backend Developer",
+  title: "Aziz Reja - Full-Stack Developer",
+  description: "Portfolio of Aziz Reja, Full-Stack Developer",
 };
 
 export default function RootLayout({ children }) {
