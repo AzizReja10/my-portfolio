@@ -5,7 +5,6 @@ import Projects from '@/components/sections/projects'
 import Contact from '@/components/sections/contact'
 import Quote from '@/components/sections/quote'
 import Activity from '@/components/sections/activity'
-
 export default function Index() {
   return (
     <main className='relative px-6 pb-16 pt-32 sm:pt-36 w-full max-w-3xl mx-auto'>

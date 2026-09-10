@@ -6,6 +6,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ScrollToHash from "@/components/scroll-to-hash";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/react";
 
 const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
@@ -43,6 +44,7 @@ export default function RootLayout({ children }) {
           </TooltipProvider>
         </ThemeProvider>
         <ScrollToHash />
+        <Analytics />
       </body>
     </html>
   );
