@@ -3,11 +3,20 @@ import { useEffect } from 'react'
 
 export default function ScrollToHash() {
     useEffect(() => {
+        const scrollToEl = (el) => {
+            if (!el) return
+            if (window.__lenis) {
+                window.__lenis.scrollTo(el, { offset: -80 })
+            } else {
+                el.scrollIntoView({ behavior: 'smooth' })
+            }
+        }
+
         const hash = window.location.hash
         if (hash) {
             setTimeout(() => {
                 const el = document.getElementById(hash.slice(1))
-                if (el) el.scrollIntoView({ behavior: 'smooth' })
+                scrollToEl(el)
             }, 100)
         }
 
@@ -18,7 +27,7 @@ export default function ScrollToHash() {
             const el = document.getElementById(hash)
             if (el) {
                 e.preventDefault()
-                el.scrollIntoView({ behavior: 'smooth' })
+                scrollToEl(el)
             }
         }
 

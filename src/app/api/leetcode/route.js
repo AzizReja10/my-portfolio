@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 900; // 15 minutes
+
+const CACHE_TTL_MS = 15 * 60 * 1000;
+let memoryCache = {
+    data: null,
+    timestamp: 0,
+    username: ''
+};
 
 // Pre-computed fallback data from AzizReja's profile to guarantee high availability
 const FALLBACK_PROFILE = {
@@ -158,6 +165,15 @@ export async function GET(request) {
         const { searchParams } = new URL(request.url);
         const username = searchParams.get('username') || 'AzizReja';
 
+        // Check in-memory cache
+        if (memoryCache.data && memoryCache.username === username && (Date.now() - memoryCache.timestamp < CACHE_TTL_MS)) {
+            return NextResponse.json(memoryCache.data, {
+                headers: {
+                    'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=86400'
+                }
+            });
+        }
+
         const response = await fetch('https://leetcode.com/graphql', {
             method: 'POST',
             cache: 'no-store',
@@ -256,14 +272,30 @@ export async function GET(request) {
             submission: submissionData
         };
 
+        // Cache successful response
+        memoryCache = {
+            data: result,
+            timestamp: Date.now(),
+            username
+        };
+
         return NextResponse.json(result, {
             headers: {
-                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0'
+                'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=86400'
             }
         });
     } catch (error) {
         console.error('LeetCode API route error, using fallback:', error);
         
+        // If we have stale cache, serve it instead of minimal fallback
+        if (memoryCache.data) {
+            return NextResponse.json(memoryCache.data, {
+                headers: {
+                    'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=86400'
+                }
+            });
+        }
+
         const fallbackResult = {
             ...FALLBACK_PROFILE,
             submission: {
@@ -277,7 +309,7 @@ export async function GET(request) {
 
         return NextResponse.json(fallbackResult, {
             headers: {
-                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0'
+                'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=86400'
             }
         });
     }

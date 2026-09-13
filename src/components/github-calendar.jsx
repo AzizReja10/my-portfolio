@@ -1,11 +1,6 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react'
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-} from "@/components/ui/tooltip"
 import { RotateCcw } from "lucide-react"
 
 const levelColors = {
@@ -23,26 +18,35 @@ export default function GithubCalendar({ username }) {
     const [calendarData, setCalendarData] = useState(null)
     const [hasError, setHasError] = useState(false)
     const calendarRef = useRef(null)
-    const [isInFocus, setIsInFocus] = useState(false)
+    const gridContainerRef = useRef(null)
+    const [hoveredDay, setHoveredDay] = useState(null)
+
+    const handleReplay = () => {
+        if (!calendarRef.current) return
+        calendarRef.current.classList.remove('heatmap-animate')
+        void calendarRef.current.offsetWidth
+        calendarRef.current.classList.add('heatmap-animate')
+    }
 
     useEffect(() => {
-        const el = calendarRef.current;
-        if (!el) return;
+        const el = calendarRef.current
+        if (!el) return
 
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
-                    setIsInFocus(true);
-                    observer.disconnect();
+                    requestAnimationFrame(() => {
+                        el.classList.add('heatmap-animate')
+                    })
+                    observer.disconnect()
                 }
             },
-            { threshold: 0.15, rootMargin: '0px 0px -30px 0px' }
-        );
+            { threshold: 0.2, rootMargin: '0px 0px -40px 0px' }
+        )
 
-        observer.observe(el);
-
-        return () => observer.disconnect();
-    }, [calendarData]);
+        observer.observe(el)
+        return () => observer.disconnect()
+    }, [calendarData])
 
     useEffect(() => {
         fetch(`/api/github-contributions?username=${username}`)
@@ -134,12 +138,21 @@ export default function GithubCalendar({ username }) {
     return (
         <div 
             ref={calendarRef}
-            tabIndex={0}
-            onFocus={() => setIsInFocus(true)}
-            className="flex w-full flex-col gap-3 font-sans focus:outline-none"
+            className="flex w-full flex-col gap-3 font-sans"
         >
             <div className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-                <div style={{ minWidth: `${minGridWidth}px` }}>
+                <div ref={gridContainerRef} className="relative" style={{ minWidth: `${minGridWidth}px` }}>
+                    {/* Floating single high-performance tooltip */}
+                    {hoveredDay && (
+                        <div
+                            className="pointer-events-none absolute z-50 -translate-x-1/2 -translate-y-full mb-2 px-2.5 py-1.5 rounded-md bg-foreground text-background text-xs whitespace-nowrap shadow-lg animate-in fade-in-0 zoom-in-95 duration-75"
+                            style={{ left: `${hoveredDay.x}px`, top: `${hoveredDay.y - 6}px` }}
+                        >
+                            <strong className="font-medium">{hoveredDay.count}</strong> contributions on {hoveredDay.date}
+                            <div className="absolute left-1/2 -translate-x-1/2 top-full size-1.5 -mt-0.5 rotate-45 bg-foreground" />
+                        </div>
+                    )}
+
                     <div className="flex w-full">
                         {initialGapWeeks > 0 && (
                             <span style={{ width: `${(initialGapWeeks / weeks.length) * 100}%` }} />
@@ -162,24 +175,24 @@ export default function GithubCalendar({ username }) {
                         {weeks.map((week, weekIndex) => (
                             <div key={weekIndex} className="flex flex-1 flex-col gap-[3px]">
                                 {week.contributionDays.map((day, dayIndex) => (
-                                    <Tooltip key={dayIndex}>
-                                        <TooltipTrigger asChild>
-                                            <div 
-                                                className={`aspect-square w-full rounded-[2px] cursor-pointer transition-transform duration-150 hover:scale-125 ${levelColors[day.contributionLevel]} ${isInFocus ? 'animate-heatmap' : 'opacity-0'}`} 
-                                                style={
-                                                    isInFocus
-                                                        ? {
-                                                            animationDelay: `${(weekIndex * 7 + ((week.contributionDays.length - 1) - dayIndex)) * 6}ms`,
-                                                            animationFillMode: "forwards",
-                                                        }
-                                                        : { opacity: 0 }
-                                                }
-                                            />
-                                        </TooltipTrigger>
-                                        <TooltipContent side="top" sideOffset={4} className="px-2 py-1.5 text-xs">
-                                            <strong className="font-medium">{day.contributionCount}</strong> contributions on {new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                        </TooltipContent>
-                                    </Tooltip>
+                                    <div 
+                                        key={dayIndex}
+                                        onMouseEnter={(e) => {
+                                            const rect = e.currentTarget.getBoundingClientRect();
+                                            const containerRect = gridContainerRef.current?.getBoundingClientRect();
+                                            if (containerRect) {
+                                                setHoveredDay({
+                                                    count: day.contributionCount,
+                                                    date: new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                                                    x: rect.left - containerRect.left + rect.width / 2,
+                                                    y: rect.top - containerRect.top,
+                                                });
+                                            }
+                                        }}
+                                        onMouseLeave={() => setHoveredDay(null)}
+                                        className={`heatmap-cell aspect-square w-full rounded-[2px] cursor-pointer ${levelColors[day.contributionLevel]}`} 
+                                        style={{ '--delay': `${(weekIndex * 7 + ((week.contributionDays.length - 1) - dayIndex)) * 3.5}ms` }}
+                                    />
                                 ))}
                             </div>
                         ))}
@@ -192,19 +205,14 @@ export default function GithubCalendar({ username }) {
                     <span>
                         <strong className="font-semibold text-foreground">{total}</strong> contributions last year
                     </span>
-                    {isInFocus && (
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setIsInFocus(false);
-                                setTimeout(() => setIsInFocus(true), 30);
-                            }}
-                            title="Replay animation"
-                            className="p-1 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/40 transition-colors"
-                        >
-                            <RotateCcw className="size-3" />
-                        </button>
-                    )}
+                    <button
+                        type="button"
+                        onClick={handleReplay}
+                        title="Replay animation"
+                        className="p-1 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/40 transition-colors cursor-pointer"
+                    >
+                        <RotateCcw className="size-3" />
+                    </button>
                 </div>
                 <div className="flex items-center gap-1.5">
                     <span>Less</span>

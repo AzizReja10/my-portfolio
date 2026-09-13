@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react'
+import Image from 'next/image'
 import { motion } from 'motion/react'
 import { Code2, MapPin, Mail, Clock, Globe, User2, FileText } from 'lucide-react'
 import { SiGithub, SiLeetcode } from "react-icons/si";
@@ -45,8 +46,11 @@ export default function Hero() {
                     className="relative shrink-0 group cursor-pointer"
                 >
                     <div className="absolute -inset-0.5 bg-gradient-to-tr from-emerald-500 to-cyan-500 rounded-2xl blur opacity-25 group-hover:opacity-60 transition duration-300"></div>
-                    <img
+                    <Image
                         alt="Aziz"
+                        width={64}
+                        height={64}
+                        priority
                         className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl object-cover border border-border/80 shadow-sm shrink-0"
                         src="/quby.png"
                     />

@@ -24,7 +24,9 @@ export default function LeetcodeStats({ username = 'AzizReja' }) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const submissionRef = useRef(null);
-    const [isSubmissionInFocus, setIsSubmissionInFocus] = useState(false);
+    const gridContainerRef = useRef(null);
+    const [hoveredDay, setHoveredDay] = useState(null);
+    const lastFetchRef = useRef(0);
 
     useEffect(() => {
         const el = submissionRef.current;
@@ -33,21 +35,28 @@ export default function LeetcodeStats({ username = 'AzizReja' }) {
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
-                    setIsSubmissionInFocus(true);
+                    requestAnimationFrame(() => {
+                        el.classList.add('heatmap-animate');
+                    });
                     observer.disconnect();
                 }
             },
-            { threshold: 0.15, rootMargin: '0px 0px -30px 0px' }
+            { threshold: 0.2, rootMargin: '0px 0px -40px 0px' }
         );
 
         observer.observe(el);
-
         return () => observer.disconnect();
-    }, [loading, data]);
+    }, [data, loading]);
 
     useEffect(() => {
-        const fetchData = () => {
-            fetch(`/api/leetcode?username=${username}&t=${Date.now()}`, { cache: 'no-store' })
+        const fetchData = (force = false) => {
+            const now = Date.now();
+            if (!force && now - lastFetchRef.current < 120000) {
+                return;
+            }
+            lastFetchRef.current = now;
+
+            fetch(`/api/leetcode?username=${username}`)
                 .then(res => {
                     if (!res.ok) throw new Error('Failed to fetch LeetCode data');
                     return res.json();
@@ -62,14 +71,14 @@ export default function LeetcodeStats({ username = 'AzizReja' }) {
                 });
         };
 
-        fetchData();
+        fetchData(true);
 
-        // Auto-refresh when you switch back to this tab (e.g. after solving on LeetCode)
-        const onFocus = () => fetchData();
+        // Auto-refresh on focus only if stale (older than 2 minutes)
+        const onFocus = () => fetchData(false);
         window.addEventListener('focus', onFocus);
 
-        // Periodic refresh every 60 seconds
-        const interval = setInterval(fetchData, 60000);
+        // Periodic refresh every 3 minutes
+        const interval = setInterval(() => fetchData(false), 180000);
 
         return () => {
             window.removeEventListener('focus', onFocus);
@@ -142,6 +151,13 @@ export default function LeetcodeStats({ username = 'AzizReja' }) {
     const radius = 38;
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (circumference * solvedPercentage) / 100;
+
+    const handleReplay = () => {
+        if (!submissionRef.current) return;
+        submissionRef.current.classList.remove('heatmap-animate');
+        void submissionRef.current.offsetWidth; // trigger reflow
+        submissionRef.current.classList.add('heatmap-animate');
+    };
 
     return (
         <div className="flex w-full flex-col gap-5 font-sans">
@@ -320,9 +336,7 @@ export default function LeetcodeStats({ username = 'AzizReja' }) {
             {/* Submission Heatmap Section */}
             <div 
                 ref={submissionRef}
-                tabIndex={0}
-                onFocus={() => setIsSubmissionInFocus(true)}
-                className="p-4 rounded-xl bg-background/50 border border-border/50 backdrop-blur-sm focus:outline-none"
+                className="p-4 rounded-xl bg-background/50 border border-border/50 backdrop-blur-sm"
             >
                 {/* Header row: Total submissions, active days, max streak */}
                 <div className="flex flex-wrap items-center justify-between gap-3 mb-3 pb-3 border-b border-border/40">
@@ -335,19 +349,14 @@ export default function LeetcodeStats({ username = 'AzizReja' }) {
                                 submissions in the past one year
                             </span>
                         </div>
-                        {isSubmissionInFocus && (
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setIsSubmissionInFocus(false);
-                                    setTimeout(() => setIsSubmissionInFocus(true), 30);
-                                }}
-                                title="Replay animation"
-                                className="p-1 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/40 transition-colors"
-                            >
-                                <RotateCcw className="size-3" />
-                            </button>
-                        )}
+                        <button
+                            type="button"
+                            onClick={handleReplay}
+                            title="Replay animation"
+                            className="p-1 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/40 transition-colors cursor-pointer"
+                        >
+                            <RotateCcw className="size-3" />
+                        </button>
                     </div>
 
                     <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground">
@@ -367,7 +376,21 @@ export default function LeetcodeStats({ username = 'AzizReja' }) {
                 {/* The Heatmap Grid */}
                 {weeks.length > 0 ? (
                     <div className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-                        <div style={{ minWidth: `${minGridWidth}px` }}>
+                        <div ref={gridContainerRef} className="relative" style={{ minWidth: `${minGridWidth}px` }}>
+                            {/* Floating single high-performance tooltip */}
+                            {hoveredDay && (
+                                <div
+                                    className="pointer-events-none absolute z-50 -translate-x-1/2 -translate-y-full mb-2 px-2.5 py-1.5 rounded-md bg-foreground text-background text-xs whitespace-nowrap shadow-lg animate-in fade-in-0 zoom-in-95 duration-75"
+                                    style={{ left: `${hoveredDay.x}px`, top: `${hoveredDay.y - 6}px` }}
+                                >
+                                    <strong className="font-medium">
+                                        {hoveredDay.count === 0 ? 'No submissions' : `${hoveredDay.count} submission${hoveredDay.count > 1 ? 's' : ''}`}
+                                    </strong>{' '}
+                                    on {hoveredDay.date}
+                                    <div className="absolute left-1/2 -translate-x-1/2 top-full size-1.5 -mt-0.5 rotate-45 bg-foreground" />
+                                </div>
+                            )}
+
                             {/* Months label row */}
                             <div className="flex w-full">
                                 {months.map((m, i) => (
@@ -386,27 +409,24 @@ export default function LeetcodeStats({ username = 'AzizReja' }) {
                                 {weeks.map((week, weekIndex) => (
                                     <div key={weekIndex} className="flex flex-1 flex-col gap-[3px]">
                                         {week.days.map((day, dayIndex) => (
-                                            <Tooltip key={dayIndex}>
-                                                <TooltipTrigger asChild>
-                                                    <div
-                                                        className={`aspect-square w-full rounded-[2px] cursor-pointer transition-transform duration-150 hover:scale-130 ${levelColors[day.level] || levelColors.NONE} ${isSubmissionInFocus ? 'animate-heatmap' : 'opacity-0'}`} 
-                                                        style={
-                                                            isSubmissionInFocus
-                                                                ? {
-                                                                    animationDelay: `${(weekIndex * 7 + (6 - dayIndex)) * 6}ms`,
-                                                                    animationFillMode: "forwards",
-                                                                }
-                                                                : { opacity: 0 }
-                                                        }
-                                                    />
-                                                </TooltipTrigger>
-                                                <TooltipContent side="top" sideOffset={4} className="px-2 py-1.5 text-xs">
-                                                    <strong className="font-medium">
-                                                        {day.count === 0 ? 'No submissions' : `${day.count} submission${day.count > 1 ? 's' : ''}`}
-                                                    </strong>{' '}
-                                                    on {new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                                </TooltipContent>
-                                            </Tooltip>
+                                            <div
+                                                key={dayIndex}
+                                                onMouseEnter={(e) => {
+                                                    const rect = e.currentTarget.getBoundingClientRect();
+                                                    const containerRect = gridContainerRef.current?.getBoundingClientRect();
+                                                    if (containerRect) {
+                                                        setHoveredDay({
+                                                            count: day.count,
+                                                            date: new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                                                            x: rect.left - containerRect.left + rect.width / 2,
+                                                            y: rect.top - containerRect.top,
+                                                        });
+                                                    }
+                                                }}
+                                                onMouseLeave={() => setHoveredDay(null)}
+                                                className={`heatmap-cell aspect-square w-full rounded-[2px] cursor-pointer ${levelColors[day.level] || levelColors.NONE}`} 
+                                                style={{ '--delay': `${(weekIndex * 7 + (6 - dayIndex)) * 3.5}ms` }}
+                                            />
                                         ))}
                                     </div>
                                 ))}

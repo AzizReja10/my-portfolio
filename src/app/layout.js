@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ScrollToHash from "@/components/scroll-to-hash";
+import SmoothScroll from "@/components/smooth-scroll";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -44,6 +45,7 @@ export default function RootLayout({ children }) {
           </TooltipProvider>
         </ThemeProvider>
         <ScrollToHash />
+        <SmoothScroll />
         <Analytics />
       </body>
     </html>
