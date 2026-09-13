@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { SiLeetcode } from "react-icons/si";
-import { Trophy, Flame, Calendar, Award, ExternalLink } from "lucide-react";
+import { Trophy, Flame, Calendar, Award, ExternalLink, RotateCcw } from "lucide-react";
 
 const levelColors = {
     NONE: "bg-muted/60 dark:bg-muted/25 border border-border/20",
@@ -23,6 +23,27 @@ const CELL_GAP = 3;
 export default function LeetcodeStats({ username = 'AzizReja' }) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const submissionRef = useRef(null);
+    const [isSubmissionInFocus, setIsSubmissionInFocus] = useState(false);
+
+    useEffect(() => {
+        const el = submissionRef.current;
+        if (!el) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsSubmissionInFocus(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.15, rootMargin: '0px 0px -30px 0px' }
+        );
+
+        observer.observe(el);
+
+        return () => observer.disconnect();
+    }, [loading, data]);
 
     useEffect(() => {
         const fetchData = () => {
@@ -297,16 +318,36 @@ export default function LeetcodeStats({ username = 'AzizReja' }) {
             </div>
 
             {/* Submission Heatmap Section */}
-            <div className="p-4 rounded-xl bg-background/50 border border-border/50 backdrop-blur-sm">
+            <div 
+                ref={submissionRef}
+                tabIndex={0}
+                onFocus={() => setIsSubmissionInFocus(true)}
+                className="p-4 rounded-xl bg-background/50 border border-border/50 backdrop-blur-sm focus:outline-none"
+            >
                 {/* Header row: Total submissions, active days, max streak */}
                 <div className="flex flex-wrap items-center justify-between gap-3 mb-3 pb-3 border-b border-border/40">
-                    <div>
-                        <span className="text-sm font-semibold text-foreground">
-                            {totalSubmissionsPastYear.toLocaleString()}
-                        </span>
-                        <span className="text-xs text-muted-foreground ml-1.5">
-                            submissions in the past one year
-                        </span>
+                    <div className="flex items-center gap-2">
+                        <div>
+                            <span className="text-sm font-semibold text-foreground">
+                                {totalSubmissionsPastYear.toLocaleString()}
+                            </span>
+                            <span className="text-xs text-muted-foreground ml-1.5">
+                                submissions in the past one year
+                            </span>
+                        </div>
+                        {isSubmissionInFocus && (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setIsSubmissionInFocus(false);
+                                    setTimeout(() => setIsSubmissionInFocus(true), 30);
+                                }}
+                                title="Replay animation"
+                                className="p-1 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/40 transition-colors"
+                            >
+                                <RotateCcw className="size-3" />
+                            </button>
+                        )}
                     </div>
 
                     <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground">
@@ -348,7 +389,15 @@ export default function LeetcodeStats({ username = 'AzizReja' }) {
                                             <Tooltip key={dayIndex}>
                                                 <TooltipTrigger asChild>
                                                     <div
-                                                        className={`aspect-square w-full rounded-[2px] cursor-pointer transition-transform duration-150 hover:scale-130 ${levelColors[day.level] || levelColors.NONE}`}
+                                                        className={`aspect-square w-full rounded-[2px] cursor-pointer transition-transform duration-150 hover:scale-130 ${levelColors[day.level] || levelColors.NONE} ${isSubmissionInFocus ? 'animate-heatmap' : 'opacity-0'}`} 
+                                                        style={
+                                                            isSubmissionInFocus
+                                                                ? {
+                                                                    animationDelay: `${(weekIndex * 7 + dayIndex) * 6}ms`,
+                                                                    animationFillMode: "forwards",
+                                                                }
+                                                                : { opacity: 0 }
+                                                        }
                                                     />
                                                 </TooltipTrigger>
                                                 <TooltipContent side="top" sideOffset={4} className="px-2 py-1.5 text-xs">
