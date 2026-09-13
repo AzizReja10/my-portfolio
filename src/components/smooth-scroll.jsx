@@ -10,6 +10,18 @@ export default function SmoothScroll() {
       return;
     }
 
+    // On mobile touch devices, native OS momentum scrolling runs at 120Hz/60Hz directly
+    // on the hardware compositor. Running JS smooth scrolling on touch screens intercepts
+    // touch events and causes input lag. Lenis should only enhance desktop mouse wheel scrolling.
+    const isTouch = 
+      'ontouchstart' in window || 
+      navigator.maxTouchPoints > 0 || 
+      window.matchMedia('(pointer: coarse)').matches;
+
+    if (isTouch) {
+      return;
+    }
+
     const lenis = new Lenis({
       duration: 1.0,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -17,7 +29,6 @@ export default function SmoothScroll() {
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 1.0,
-      touchMultiplier: 1.2,
     });
 
     // Provide lenis instance to window for anchor links and programmatic scrolling

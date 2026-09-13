@@ -212,6 +212,18 @@ html.lenis, html.lenis body {
   }
 }
 
+/* Mobile smooth touch scrolling & hardware acceleration */
+@media (max-width: 640px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
