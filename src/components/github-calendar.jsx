@@ -1,11 +1,12 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { RotateCcw } from "lucide-react"
 
 const levelColors = {
     NONE: "bg-muted/60 dark:bg-muted/30 border border-border/20",
@@ -21,6 +22,27 @@ const CELL_GAP = 3
 export default function GithubCalendar({ username }) {
     const [calendarData, setCalendarData] = useState(null)
     const [hasError, setHasError] = useState(false)
+    const calendarRef = useRef(null)
+    const [isInFocus, setIsInFocus] = useState(false)
+
+    useEffect(() => {
+        const el = calendarRef.current;
+        if (!el) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsInFocus(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.15, rootMargin: '0px 0px -30px 0px' }
+        );
+
+        observer.observe(el);
+
+        return () => observer.disconnect();
+    }, [calendarData]);
 
     useEffect(() => {
         fetch(`/api/github-contributions?username=${username}`)
@@ -110,7 +132,12 @@ export default function GithubCalendar({ username }) {
     }
 
     return (
-        <div className="flex w-full flex-col gap-3 font-sans">
+        <div 
+            ref={calendarRef}
+            tabIndex={0}
+            onFocus={() => setIsInFocus(true)}
+            className="flex w-full flex-col gap-3 font-sans focus:outline-none"
+        >
             <div className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                 <div style={{ minWidth: `${minGridWidth}px` }}>
                     <div className="flex w-full">
@@ -137,7 +164,17 @@ export default function GithubCalendar({ username }) {
                                 {week.contributionDays.map((day, dayIndex) => (
                                     <Tooltip key={dayIndex}>
                                         <TooltipTrigger asChild>
-                                            <div className={`aspect-square w-full rounded-[2px] cursor-pointer transition-transform duration-150 hover:scale-125 ${levelColors[day.contributionLevel]}`} />
+                                            <div 
+                                                className={`aspect-square w-full rounded-[2px] cursor-pointer transition-transform duration-150 hover:scale-125 ${levelColors[day.contributionLevel]} ${isInFocus ? 'animate-heatmap' : 'opacity-0'}`} 
+                                                style={
+                                                    isInFocus
+                                                        ? {
+                                                            animationDelay: `${(weekIndex * 7 + ((week.contributionDays.length - 1) - dayIndex)) * 6}ms`,
+                                                            animationFillMode: "forwards",
+                                                        }
+                                                        : { opacity: 0 }
+                                                }
+                                            />
                                         </TooltipTrigger>
                                         <TooltipContent side="top" sideOffset={4} className="px-2 py-1.5 text-xs">
                                             <strong className="font-medium">{day.contributionCount}</strong> contributions on {new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
@@ -151,9 +188,24 @@ export default function GithubCalendar({ username }) {
             </div>
 
             <div className="flex items-center justify-between font-mono text-[11px] text-muted-foreground">
-                <span>
-                    <strong className="font-semibold text-foreground">{total}</strong> contributions last year
-                </span>
+                <div className="flex items-center gap-2">
+                    <span>
+                        <strong className="font-semibold text-foreground">{total}</strong> contributions last year
+                    </span>
+                    {isInFocus && (
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setIsInFocus(false);
+                                setTimeout(() => setIsInFocus(true), 30);
+                            }}
+                            title="Replay animation"
+                            className="p-1 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/40 transition-colors"
+                        >
+                            <RotateCcw className="size-3" />
+                        </button>
+                    )}
+                </div>
                 <div className="flex items-center gap-1.5">
                     <span>Less</span>
                     <div className="flex gap-[3px]">

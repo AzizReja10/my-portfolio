@@ -393,7 +393,7 @@ export default function LeetcodeStats({ username = 'AzizReja' }) {
                                                         style={
                                                             isSubmissionInFocus
                                                                 ? {
-                                                                    animationDelay: `${(weekIndex * 7 + dayIndex) * 6}ms`,
+                                                                    animationDelay: `${(weekIndex * 7 + (6 - dayIndex)) * 6}ms`,
                                                                     animationFillMode: "forwards",
                                                                 }
                                                                 : { opacity: 0 }
