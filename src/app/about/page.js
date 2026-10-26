@@ -106,11 +106,11 @@ export default function About() {
 
           <div>
             <h3 className="font-semibold text-foreground text-lg">
-              Banking App
+              Ticket Booking
             </h3>
             <p>
-              A full-stack banking application built with Java Spring Boot and React, featuring
-              secure authentication, fund transfers, balance tracking, and transaction history.
+              A high-concurrency ticket booking and flash sale platform built with Spring Boot, Redis,
+              and PostgreSQL, featuring atomic Lua scripts to prevent overselling and distributed locks for seat reservations.
             </p>
           </div>
         </div>

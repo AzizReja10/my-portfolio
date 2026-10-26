@@ -91,12 +91,12 @@ export const SHOWCASE_DATA = [
         ],
       },
       {
-        title: "Banking App",
-        link: "https://banking-app-5.onrender.com/login",
-        github: "https://github.com/AzizReja10/Banking-App",
-        image: "/projects/banking-app.png",
+        title: "Ticket Booking",
+        link: "https://ticket-booking-46bd.vercel.app/",
+        github: "https://github.com/AzizReja10/Ticket-Booking",
+        image: "/projects/ticket-booking.png",
         description:
-          "A full-stack banking application built with Java Spring Boot and React, featuring secure authentication, fund transfers, balance tracking, and transaction history.",
+          "A high-concurrency ticket booking and flash sale platform built with Spring Boot, Redis, PostgreSQL, and Docker, featuring atomic Redis Lua scripts to prevent overselling and distributed locks for seat reservations.",
         tech: [
           {
             name: "Java",
@@ -107,16 +107,16 @@ export const SHOWCASE_DATA = [
             icon: "/icons/spring.svg",
           },
           {
-            name: "React",
-            icon: "/icons/react.svg",
-          },
-          {
             name: "PostgreSQL",
             icon: "/icons/postgresql.svg",
           },
           {
             name: "Docker",
             icon: "/icons/docker.svg",
+          },
+          {
+            name: "React",
+            icon: "/icons/react.svg",
           },
         ],
       },
@@ -141,8 +141,8 @@ export const SHOWCASE_DATA = [
         logoUrl: "/logos/logo3.png",
       },
       {
-        name: "Banking App",
-        description: "Full-stack banking system",
+        name: "Ticket Booking",
+        description: "High-concurrency booking platform",
         logoUrl: "/logos/logo4.png",
       },
     ],
